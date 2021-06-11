@@ -17,9 +17,9 @@ PROXY = os.environ.get('FIXIE_URL', '')
 
 #chromeoptions fo heroku
 chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument("--headless")
+# chrome_options.add_argument("--headless")
 chrome_options.add_argument('--ignore-certificate-errors')
-chrome_options.add_argument('--disable-gpu')
+# chrome_options.add_argument('--disable-gpu')
 chrome_options.add_argument('--window-size=1280,1000')
 chrome_options.add_argument('--allow-insecure-localhost')
 chrome_options.add_argument('--allow-running-insecure-content')
