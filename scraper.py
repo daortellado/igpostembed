@@ -63,6 +63,7 @@ driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), c
 
 #test
 driver.get(homepage)
+time.sleep(3)
 html = driver.page_source
 print(html)
 
