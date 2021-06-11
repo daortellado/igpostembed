@@ -19,6 +19,12 @@ chrome_options.add_argument("--disable-dev-shm-usage")
 chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("window-size=1400,900")
 
+#proxy
+proxyDict = { 
+              "http"  : os.environ.get('FIXIE_URL', ''), 
+              "https" : os.environ.get('FIXIE_URL', '')
+            }
+
 # app and db
 app = flask.Flask(__name__)
 cors = CORS(app)
@@ -48,14 +54,13 @@ chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
 driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
 #test
-driver.get(homepage)
+driver.get(homepage, proxies=proxyDict)
 html = driver.page_source
 print(html)
 
 #scrape most recent
 def get_latest(homepage):
 	driver.get(homepage)
-	time.sleep(.5)
 	latest = WebDriverWait(driver, 20).until(expected_conditions.presence_of_element_located((By.XPATH, ".//article/div/div/div/div/a")))
 	get_latest.latest = latest.get_attribute('href')
 	
