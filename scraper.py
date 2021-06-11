@@ -4,6 +4,7 @@ from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
+from selenium.webdriver import DesiredCapabilities
 import time
 import flask
 from flask import request, jsonify
@@ -26,6 +27,9 @@ chrome_options.add_argument('--allow-running-insecure-content')
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--ignore-ssl-errors')
 chrome_options.add_argument('--proxy-server=%s' % PROXY)
+capabilities = DesiredCapabilities.CHROME.copy()
+capabilities['acceptSslCerts'] = True
+capabilities['acceptInsecureCerts'] = True
 
 # app and db
 app = flask.Flask(__name__)
@@ -53,7 +57,7 @@ homepage = 'https://www.instagram.com/problemplays/'
 # driver = webdriver.Chrome(PATH)
 #cloud path for heroku
 chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options, desired_capabilities=capabilities)
 
 #test
 driver.get(homepage)
