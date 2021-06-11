@@ -52,7 +52,7 @@ chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
 driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
 #test
-driver.get(homepage, proxies=proxyDict)
+driver.get(homepage)
 html = driver.page_source
 print(html)
 
