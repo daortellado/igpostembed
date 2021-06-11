@@ -14,6 +14,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import request, jsonify
 import os
 from flask_cors import CORS, cross_origin
+from pyvirtualdisplay import Display
 
 #proxy
 PROXY = os.environ.get('FIXIE_URL', '')
@@ -22,12 +23,12 @@ PROXY = os.environ.get('FIXIE_URL', '')
 chrome_options = Options()
 chrome_options.add_argument("--headless")
 chrome_options.add_argument('--ignore-certificate-errors')
-# chrome_options.add_argument('--disable-gpu')
+chrome_options.add_argument('--disable-gpu')
 # chrome_options.add_argument('--window-size=1280,1000')
-# chrome_options.add_argument('--allow-insecure-localhost')
-# chrome_options.add_argument('--allow-running-insecure-content')
-# chrome_options.add_argument('--no-sandbox')
-# chrome_options.add_argument('--ignore-ssl-errors')
+chrome_options.add_argument('--allow-insecure-localhost')
+chrome_options.add_argument('--allow-running-insecure-content')
+chrome_options.add_argument('--no-sandbox')
+chrome_options.add_argument('--ignore-ssl-errors')
 chrome_options.add_argument('--proxy-server=%s' % PROXY)
 capabilities = DesiredCapabilities.CHROME.copy()
 capabilities['acceptSslCerts'] = True
@@ -51,6 +52,10 @@ class IGUrl(database.Model):
 
 database.create_all()
 database.session.commit()
+
+#virtualdisplay
+display = Display(visible=0, size=(800, 600))
+display.start()
 
 #driver
 homepage = 'https://www.instagram.com/problemplays/'
@@ -109,7 +114,8 @@ if str(get_latest.latest) != str(recent_url):
 	database.session.add(url_object)
 	database.session.commit()
 
-driver.quit()
+driver.close()
+display.stop()
 
 #api
 
