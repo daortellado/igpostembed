@@ -42,6 +42,7 @@ database.session.commit()
 homepage = 'https://www.instagram.com/problemplays/'
 #local path not for heroku
 # PATH = "C:\Program Files (x86)\chromedriver.exe"
+# driver = webdriver.Chrome(PATH)
 #cloud path for heroku
 chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
 driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
@@ -49,7 +50,7 @@ driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), c
 #scrape most recent
 def get_latest(homepage):
 	driver.get(homepage)
-	latest = WebDriverWait(driver, 20).until(expected_conditions.presence_of_element_located((By.XPATH, ".//article/div/div/div/div/a")))
+	latest = WebDriverWait(driver, 200).until(expected_conditions.presence_of_element_located((By.XPATH, ".//article/div/div/div/div/a")))
 	get_latest.latest = latest.get_attribute('href')
 	
 #scrape embed and write to db
