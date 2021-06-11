@@ -47,10 +47,16 @@ homepage = 'https://www.instagram.com/problemplays/'
 chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
 driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
+#test
+driver.get(homepage)
+html = driver.page_source
+print(html)
+
 #scrape most recent
 def get_latest(homepage):
 	driver.get(homepage)
-	latest = WebDriverWait(driver, 200).until(expected_conditions.presence_of_element_located((By.XPATH, ".//article/div/div/div/div/a")))
+	time.sleep(.5)
+	latest = WebDriverWait(driver, 20).until(expected_conditions.presence_of_element_located((By.XPATH, ".//article/div/div/div/div/a")))
 	get_latest.latest = latest.get_attribute('href')
 	
 #scrape embed and write to db
