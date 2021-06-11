@@ -18,9 +18,12 @@ PROXY = os.environ.get('FIXIE_URL', '')
 #chromeoptions fo heroku
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument("--headless")
-chrome_options.add_argument("--disable-dev-shm-usage")
-chrome_options.add_argument("--no-sandbox")
-chrome_options.add_argument("window-size=1400,900")
+chrome_options.add_argument('--ignore-certificate-errors')
+chrome_options.add_argument('--disable-gpu')
+chrome_options.add_argument('--window-size=1280,1000')
+chrome_options.add_argument('--allow-insecure-localhost')
+chrome_options.add_argument('--allow-running-insecure-content')
+chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--proxy-server=%s' % PROXY)
 
 # app and db
