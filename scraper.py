@@ -12,18 +12,16 @@ from flask import request, jsonify
 import os
 from flask_cors import CORS, cross_origin
 
+#proxy
+PROXY = os.environ.get('FIXIE_URL', '')
+
 #chromeoptions fo heroku
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument("--headless")
 chrome_options.add_argument("--disable-dev-shm-usage")
 chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("window-size=1400,900")
-
-#proxy
-proxyDict = { 
-              "http"  : os.environ.get('FIXIE_URL', ''), 
-              "https" : os.environ.get('FIXIE_URL', '')
-            }
+chrome_options.add_argument('--proxy-server=%s' % PROXY)
 
 # app and db
 app = flask.Flask(__name__)
