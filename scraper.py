@@ -5,6 +5,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver import DesiredCapabilities
+from selenium.webdriver import Chrome
+from selenium.webdriver.chrome.options import Options
 import time
 import flask
 from flask import request, jsonify
@@ -17,7 +19,7 @@ from flask_cors import CORS, cross_origin
 PROXY = os.environ.get('FIXIE_URL', '')
 
 #chromeoptions fo heroku
-chrome_options = webdriver.ChromeOptions()
+chrome_options = Options()
 chrome_options.add_argument("--headless")
 chrome_options.add_argument('--ignore-certificate-errors')
 chrome_options.add_argument('--disable-gpu')
