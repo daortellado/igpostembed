@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver import DesiredCapabilities
-from selenium.webdriver import Chrome
+# from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.options import Options
 import time
 import flask
@@ -14,25 +14,25 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import request, jsonify
 import os
 from flask_cors import CORS, cross_origin
-from pyvirtualdisplay import Display
+# from pyvirtualdisplay import Display
 
 #proxy
-PROXY = os.environ.get('FIXIE_URL', '')
+# PROXY = os.environ.get('FIXIE_URL', '')
 
-#chromeoptions fo heroku
-chrome_options = Options()
-chrome_options.add_argument("--headless")
-chrome_options.add_argument('--ignore-certificate-errors')
-chrome_options.add_argument('--disable-gpu')
+#chromeoptions for heroku
+# chrome_options = Options()
+# chrome_options.add_argument("--headless")
+# chrome_options.add_argument('--ignore-certificate-errors')
+# chrome_options.add_argument('--disable-gpu')
 # chrome_options.add_argument('--window-size=1280,1000')
-chrome_options.add_argument('--allow-insecure-localhost')
-chrome_options.add_argument('--allow-running-insecure-content')
-chrome_options.add_argument('--no-sandbox')
-chrome_options.add_argument('--ignore-ssl-errors')
-chrome_options.add_argument('--proxy-server=%s' % PROXY)
-capabilities = DesiredCapabilities.CHROME.copy()
-capabilities['acceptSslCerts'] = True
-capabilities['acceptInsecureCerts'] = True
+# chrome_options.add_argument('--allow-insecure-localhost')
+# chrome_options.add_argument('--allow-running-insecure-content')
+# chrome_options.add_argument('--no-sandbox')
+# chrome_options.add_argument('--ignore-ssl-errors')
+# chrome_options.add_argument('--proxy-server=%s' % PROXY)
+# capabilities = DesiredCapabilities.CHROME.copy()
+# capabilities['acceptSslCerts'] = True
+# capabilities['acceptInsecureCerts'] = True
 
 # app and db
 app = flask.Flask(__name__)
@@ -54,22 +54,25 @@ database.create_all()
 database.session.commit()
 
 #virtualdisplay
-display = Display(visible=0, size=(800, 600))
-display.start()
+# display = Display(visible=0, size=(800, 600))
+# display.start()
 
 #driver
 homepage = 'https://www.instagram.com/problemplays/'
 #local path not for heroku
-# PATH = "C:\Program Files (x86)\chromedriver.exe"
-# driver = webdriver.Chrome(PATH)
+#PATH = "C:\Program Files (x86)\chromedriver.exe"
+#driver = webdriver.Chrome(PATH)
+options = webdriver.ChromeOptions() 
+options.add_argument("user-data-dir=C:\\Users\\rocki\\AppData\\Local\\Google\\Chrome\\User Data")
+driver = webdriver.Chrome(executable_path='C:/chromedriver', chrome_options=options)
 #cloud path for heroku
-chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options, desired_capabilities=capabilities)
+# chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+# driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options, desired_capabilities=capabilities)
 
 #test
-driver.get(homepage)
-html = driver.page_source
-print(html)
+# driver.get(homepage)
+# html = driver.page_source
+# print(html)
 
 #scrape most recent
 def get_latest(homepage):
@@ -80,7 +83,9 @@ def get_latest(homepage):
 #scrape embed and write to db
 def scraper(url):
 	driver.get(url)
-	button = driver.find_element_by_tag_name("button")
+	driver.implicitly_wait(10)
+	button = driver.find_element_by_class_name("_abl-")
+	print button
 	button.click()
 	try:
 		embed = WebDriverWait(driver, 20).until(expected_conditions.presence_of_element_located((By.XPATH, ".//div[@role = 'dialog']/div/div/div/button[5]"))) 
@@ -115,7 +120,7 @@ if str(get_latest.latest) != str(recent_url):
 	database.session.commit()
 
 driver.close()
-display.stop()
+# display.stop()
 
 #api
 
